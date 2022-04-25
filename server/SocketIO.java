@@ -19,6 +19,10 @@ public class SocketIO {
         }
     }
 
+    public void send(String msg) {
+        this.out.println(msg);
+    }
+
     public PrintWriter getOut() {
         return out;
     }
