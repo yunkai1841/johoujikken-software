@@ -24,6 +24,7 @@ public class Server {
         for (int i = 0; i < maxPlayer; i++) {
             socketIO[i].send(result);
             monster[i].showCurrent(socketIO[i].getOut());
+            socketIO[i].send("END");
         }
         System.out.println("End of action");
 

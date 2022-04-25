@@ -15,15 +15,14 @@ public class Client {
             String send = null;//送信文字列
             while(true){
                 String str = in.readLine();//データ受信
+                if(str.equals("END")) break;
                 if("WAITING CLIENT".equals(str)){
                     send = reader.readLine();
                     out.println(send);//データ送信 
                 }else{
                     System.out.println(str);
                 }
-                if("END".equals(send)) break;
             }
-            out.println("END");
         } finally {
             System.out.println("closing...");
             socket.close();
