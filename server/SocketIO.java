@@ -34,4 +34,13 @@ public class SocketIO {
     public Socket getSocket() {
         return socket;
     }
+
+    public void close() {
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Socket IO close error");
+        }
+    }
 }
