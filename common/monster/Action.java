@@ -16,7 +16,7 @@ public class Action {
         this.power = p;
     }
 
-    public void DO(Monster mons1, Monster mons2, PrintWriter out){
+    public String exec(Monster mons1, Monster mons2){
         int damage;
         double k;
         double check = 1;//タイプ一致
@@ -58,12 +58,16 @@ public class Action {
             k = mons1.attack.getValue() / mons2.block.getValue();
         }
         damage = (int) (((42 * k * this.power) / 50 + 2) * check * rate * mons1ld * mons2ld);
-        out.println("-----------------------------");
-        out.println(mons1.name + "の" + name);
-        out.println(mons2.name + "に" + damage + "のダメージ");
+
+        // generate result message
+        StringBuilder result = new StringBuilder();
+        result.append("-----------------------------\n");
+        result.append(mons1.name + "の" + name + "\n");
+        result.append(mons2.name + "に" + damage + "のダメージ" + "\n");
         mons2.HP = mons2.HP - damage;
-        out.println("-----------------------------");
-    
+        result.append("-----------------------------\n");
+        
+        return result.toString();
     }
     
 }
