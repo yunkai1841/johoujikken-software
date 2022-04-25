@@ -1,4 +1,5 @@
 package server;
+
 import java.io.*;
 import java.net.*;
 
@@ -6,38 +7,30 @@ import common.monster.*;
 
 public class Server {
     public static void main(String[] args) throws IOException {
-        ServerSocket s = new ServerSocket(80);//ソケットを作成する
-        System.out.println("Started: " + s);
-        try{
-            Socket socket = s.accept();//コネクション設定要求を待つ
-            try{
-                System.out.println("Connection accepted: " + socket);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));//データ受信用バッファの設定
-                PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);//送信バッファ設定
-                while(true){
-                    Monster mons1 = new Monster(in,out);
-                    Monster mons2 = new Monster(in,out);
-                    mons1.showStatus(out);
-                    mons2.showStatus(out);
-                    mons1.showCurrent(out);
-                    mons2.showCurrent(out);
-                    Action act1 = new Action("death",1, true, 60);
-                    act1.DO(mons1, mons2, out);
-                    mons1.showCurrent(out);
-                    mons2.showCurrent(out);
-                    System.out.println("check");
-                    out.println("WAITING CLIENT");
-                    String str = in.readLine();//データの受信
-                    System.out.println(str);
-                    if("END".equals(str)) break;
-                    out.println(str);
-                }
-            }finally{
-                System.out.println("closing...");
-                socket.close();
-            }
-        }finally{
+        ServerSocket serverSocket = new ServerSocket(80);// ソケットを作成する
+        System.out.println("Started: " + serverSocket);
+        final int maxPlayer = 2;
+        SocketIO socketIO[] = new SocketIO[maxPlayer];
+        Monster monster[] = new Monster[maxPlayer];
+        for (int i = 0; i < maxPlayer; i++) {
+            socketIO[i] = new SocketIO(serverSocket.accept());
+            System.out.println("Accept connection: " + socketIO[i].getSocket());
+            monster[i] = new Monster(socketIO[i].getIn(), socketIO[i].getOut());
+            monster[i].showStatus(socketIO[i].getOut());
+            monster[i].showCurrent(socketIO[i].getOut());
+        }
+        Action act1 = new Action("death", 1, true, 60);
+        String result = act1.exec(monster[0], monster[1]);
+        for (int i = 0; i < maxPlayer; i++) {
+            socketIO[i].send(result);
+            monster[i].showCurrent(socketIO[i].getOut());
+        }
+        System.out.println("End of action");
+
+        // close sockets
+        for (SocketIO s : socketIO) {
             s.close();
         }
+        serverSocket.close();
     }
 }
