@@ -1,4 +1,4 @@
-package common.monster.status;
+package Game.Monster.status;
 import java.io.*;
 import java.util.Random;
 

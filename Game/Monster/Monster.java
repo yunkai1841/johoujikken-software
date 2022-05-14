@@ -1,7 +1,7 @@
-package common.monster;
+package Game.Monster;
 import java.io.*;
 
-import common.monster.status.*;
+import Game.monster.status.*;
 
 public class Monster{
     public String name;//名前

@@ -3,7 +3,7 @@ package server;
 import java.io.*;
 import java.net.*;
 
-import common.monster.*;
+import Game.Monster.*;
 
 public class Server {
     public static void main(String[] args) throws IOException {

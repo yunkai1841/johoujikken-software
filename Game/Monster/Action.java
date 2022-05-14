@@ -1,4 +1,4 @@
-package common.monster;
+package Game.Monster;
 
 import java.io.PrintWriter;
 
